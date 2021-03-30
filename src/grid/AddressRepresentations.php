@@ -1,0 +1,25 @@
+<?php
+
+namespace hipanel\modules\ipam\grid;
+
+use hiqdev\higrid\representations\RepresentationCollection;
+use Yii;
+
+class AddressRepresentations extends RepresentationCollection
+{
+    protected function fillRepresentations(): void
+    {
+        $this->representations = array_filter([
+            'common' => [
+                'label' => Yii::t('hipanel', 'common'),
+                'columns' => [
+                    'checkbox',
+                    'ip',
+                    'type',
+                    'vrf',
+                    'note',
+                ],
+            ],
+        ]);
+    }
+}
