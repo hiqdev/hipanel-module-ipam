@@ -14,7 +14,7 @@ class SidebarMenu extends Menu
         return [
             'ipam' => [
                 'label' => Yii::t('hipanel.ipam', 'IPAM'),
-                'url' => '#',
+                'url' => ['/ipam/aggregate/index'],
                 'icon' => 'fa-sitemap',
                 'items' => [
                     'ip-addresses' => [
