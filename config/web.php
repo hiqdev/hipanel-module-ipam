@@ -10,21 +10,19 @@
 
 return [
     'aliases' => [
-        '@ip' => '/hosting/ip',
-        '@request' => '/hosting/request',
-        '@aggregate' => '/hosting/aggregate',
-        '@prefix' => '/hosting/prefix',
-        '@address' => '/hosting/address',
+        '@aggregate' => '/ipam/aggregate',
+        '@prefix' => '/ipam/prefix',
+        '@address' => '/ipam/address',
     ],
     'modules' => [
-        'hosting' => [
-            'class' => \hipanel\modules\hosting\Module::class,
+        'ipam' => [
+            'class' => \hipanel\modules\ipam\Module::class,
         ],
     ],
     'components' => [
         'i18n' => [
             'translations' => [
-                'hipanel.hosting.ipam' => [
+                'hipanel.ipam' => [
                     'class' => \yii\i18n\PhpMessageSource::class,
                     'basePath' => dirname(__DIR__) . '/src/messages',
                 ],
@@ -35,12 +33,12 @@ return [
         'definitions' => [
             \hiqdev\thememanager\menus\AbstractSidebarMenu::class => [
                 'add' => [
-                    'hosting' => [
+                    'ipam' => [
                         'menu' => [
-                            'class' => \hipanel\modules\hosting\menus\SidebarMenu::class,
+                            'class' => \hipanel\modules\ipam\menus\SidebarMenu::class,
                         ],
                         'where' => [
-                            'after' => ['servers', 'domains', 'tickets', 'finance', 'clients', 'dashboard'],
+                            'after' => ['servers', 'domains', 'tickets', 'finance', 'clients', 'dashboard', 'hosting'],
                             'before' => ['stock'],
                         ],
                     ],
