@@ -12,8 +12,10 @@ use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
 use hipanel\base\CrudController;
 use hipanel\filters\EasyAccessControl;
+use hipanel\modules\hosting\models\Link;
 use hipanel\modules\ipam\helpers\PrefixSort;
 use hipanel\modules\ipam\models\Prefix;
+use hiqdev\hiart\Collection;
 use yii\base\Event;
 use yii\data\ArrayDataProvider;
 use yii\helpers\ArrayHelper;
@@ -59,6 +61,9 @@ class AddressController extends CrudController
                 'class' => SmartCreateAction::class,
                 'success' => Yii::t('hipanel.ipam', 'IP Address was created successfully'),
                 'error' => Yii::t('hipanel.ipam', 'An error occurred when trying to add a prefix'),
+                'collectionLoader' => function ($action) {
+                    $this->collectionLoader($action->scenario, $action->collection);
+                },
                 'POST html' => [
                     'save' => true,
                     'success' => [
@@ -75,7 +80,10 @@ class AddressController extends CrudController
                     /** @var SearchAction $action */
                     $action = $event->sender;
                     $dataProvider = $action->getDataProvider();
-                    $dataProvider->query->withParent();
+                    $dataProvider->query->withParent()->withLinks();
+                },
+                'collectionLoader' => function ($action) {
+                    $this->collectionLoader($action->scenario, $action->collection);
                 },
             ],
             'delete' => [
@@ -91,5 +99,22 @@ class AddressController extends CrudController
                 'error' => Yii::t('hipanel.ipam', 'Failed to change description'),
             ],
         ]);
+    }
+
+    public function collectionLoader($scenario, Collection $collection): void
+    {
+        $addressModel = $this->newModel(['scenario' => $scenario]);
+        $linkModel = new Link(['scenario' => $scenario]);
+        $addressModel->load($this->request->post());
+        $ipLinks = $this->request->post($linkModel->formName(), []);
+        $ipLinkModels = [];
+        $ipLinkModels = array_pad($ipLinkModels, count($ipLinks), $linkModel);
+        Link::loadMultiple($ipLinkModels, [$linkModel->formName() => $ipLinks]);
+        foreach ($ipLinkModels as $link) {
+            if ($link->ip_id === $addressModel->id && $link->validate()) {
+                $addressModel->addLink($link);
+            }
+        }
+        $collection->set($addressModel);
     }
 }

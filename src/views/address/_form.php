@@ -26,7 +26,7 @@ $form = ActiveForm::begin([
                 <h3 class="box-title"><?= Yii::t('hipanel.ipam', 'IP Address') ?></h3>
             </div>
             <div class="box-body">
-                <?= Html::activeHiddenInput($model, 'id') ?>
+                <?= Html::activeHiddenInput($model, 'id', ['data-attribute' => 'id']) ?>
                 <?= $form->field($model, 'ip', ['options' => ['style' => 'margin-bottom: 0;']])->hint(Yii::t('hipanel.ipam', 'IPv4 or IPv6 network with mask or specify a numeric range to create multiple IPs.')) ?>
                 <div class="help-block" style="margin: 0 0 1em;">
                     <div class="format"><?= Yii::t('hipanel.ipam', 'Format:') ?>
@@ -59,6 +59,9 @@ $form = ActiveForm::begin([
                 <?= $form->field($model, 'note')->textarea(['rows' => 2]) ?>
             </div>
         </div>
+    </div>
+    <div class="col-md-6">
+        <?= $this->render('_links-form', ['form' => $form, 'model' => $model]) ?>
     </div>
     <div class="col-md-12 col-sm-12 col-xs-12">
         <?= Html::submitButton(Yii::t('hipanel', $model->isNewRecord ? 'Create' : 'Save'), ['class' => 'btn btn-success']) ?>

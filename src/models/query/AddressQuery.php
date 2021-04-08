@@ -6,10 +6,18 @@ use hiqdev\hiart\ActiveQuery;
 
 class AddressQuery extends ActiveQuery
 {
-    public function init()
+    public function init(): void
     {
         parent::init();
         $this->ipOnly();
+    }
+
+    public function withLinks(): self
+    {
+        $this->joinWith('links');
+        $this->andWhere(['with_links' => true]);
+
+        return $this;
     }
 
     public function withParent(): self
