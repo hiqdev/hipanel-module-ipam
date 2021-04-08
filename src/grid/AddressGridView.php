@@ -30,6 +30,7 @@ class AddressGridView extends PrefixGridView
                     'url' => '@address/set-note',
                 ],
                 'filter' => true,
+                'filterAttribute' => 'note_ilike',
                 'popover' => Yii::t('hipanel', 'Make any notes for your convenience'),
             ],
             'actions' => [

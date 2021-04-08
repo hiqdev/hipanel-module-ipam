@@ -45,6 +45,7 @@ class AggregateGridView extends BoxedGridView
                     'url' => '@aggregate/set-note',
                 ],
                 'filter' => true,
+                'filterAttribute' => 'note_ilike',
                 'popover' => Yii::t('hipanel', 'Make any notes for your convenience'),
             ],
             'utilization' => [
