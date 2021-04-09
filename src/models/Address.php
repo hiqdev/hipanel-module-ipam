@@ -6,6 +6,7 @@ use hipanel\base\ModelTrait;
 use hipanel\modules\hosting\models\Link;
 use hipanel\modules\ipam\models\query\AddressQuery;
 use hipanel\modules\ipam\models\traits\IPBlockTrait;
+use hiqdev\hiart\ActiveQuery;
 use Yii;
 use yii\db\QueryInterface;
 use yii\helpers\ArrayHelper;
@@ -15,8 +16,6 @@ class Address extends Prefix
 {
     use IPBlockTrait, ModelTrait;
 
-    private array $_links = [];
-
     public static function tableName()
     {
         return 'prefix';
@@ -25,7 +24,9 @@ class Address extends Prefix
     /** {@inheritdoc} */
     public function rules()
     {
-        $res = array_merge(parent::rules(), [
+        return array_merge(parent::rules(), [
+            [['device'], 'string', 'on' => ['create', 'update']],
+            [['device_id'], 'integer'],
             'ip_validate' => [
                 ['ip'], 'ip', 'subnet' => null,
                 'when' => fn($model) => strpos($model->ip, '[') === false,
@@ -33,8 +34,6 @@ class Address extends Prefix
                 'on' => ['create', 'update'],
             ],
         ]);
-
-        return $res;
     }
 
     /** {@inheritdoc} */
@@ -42,6 +41,7 @@ class Address extends Prefix
     {
         return array_merge(parent::attributeLabels(), [
             'ip' => Yii::t('hipanel.ipam', 'Address'),
+            'device' => Yii::t('hipanel.ipam', 'Link to device'),
             'type' => Yii::t('hipanel.ipam', 'Status'),
         ]);
     }
@@ -57,34 +57,20 @@ class Address extends Prefix
         ]);
     }
 
-    public function getLinks()
+    public function getLinks(): ActiveQuery
     {
-        return in_array($this->scenario, ['create', 'update'], true)
-            ? ArrayHelper::toArray($this->getAddedLinks())
-            : $this->hasMany(Link::class, ['ip_id' => 'id']);
+        return $this->hasMany(Link::class, ['ip_id' => 'id']);
     }
 
-    public function setAddedLinks(array $links = []): void
+    public function afterFind()
     {
-        foreach ($links as $link) {
-            $this->addLink($link);
+        parent::afterFind();
+        if ($this->isRelationPopulated('links')) {
+            $link = reset($this->links);
+            if ($link instanceof Link) {
+                $this->device = $link->device;
+                $this->device_id = $link->device_id;
+            }
         }
-    }
-
-    public function getAddedLinks(): array
-    {
-        if ($this->isNewRecord && empty($this->_links)) {
-            $this->addLink(new Link(['scenario' => 'create']));
-        }
-        if (empty($this->_links)) {
-            $this->setAddedLinks($this->links);
-        }
-
-        return $this->_links ?? [];
-    }
-
-    public function addLink(Link $link): void
-    {
-        $this->_links[] = $link;
     }
 }

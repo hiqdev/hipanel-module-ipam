@@ -1,5 +1,6 @@
 <?php
 
+use hipanel\modules\server\widgets\combo\ServerCombo;
 use hiqdev\combo\StaticCombo;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -7,7 +8,6 @@ use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $model hipanel\modules\ipam\models\Address */
-
 
 $form = ActiveForm::begin([
     'id' => 'prefix-form',
@@ -56,12 +56,10 @@ $form = ActiveForm::begin([
                     'hasId' => true,
                     'multiple' => true,
                 ]) ?>
+                <?= $form->field($model, 'device')->widget(ServerCombo::class, ['pluginOptions' => []]) ?>
                 <?= $form->field($model, 'note')->textarea(['rows' => 2]) ?>
             </div>
         </div>
-    </div>
-    <div class="col-md-6">
-        <?= $this->render('_links-form', ['form' => $form, 'model' => $model]) ?>
     </div>
     <div class="col-md-12 col-sm-12 col-xs-12">
         <?= Html::submitButton(Yii::t('hipanel', $model->isNewRecord ? 'Create' : 'Save'), ['class' => 'btn btn-success']) ?>

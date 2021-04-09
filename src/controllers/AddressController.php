@@ -43,10 +43,21 @@ class AddressController extends CrudController
         return array_merge(parent::actions(), [
             'index' => [
                 'class' => IndexAction::class,
+                'on beforePerform' => static function (Event $event): void {
+                    /** @var SearchAction $action */
+                    $action = $event->sender;
+                    $dataProvider = $action->getDataProvider();
+                    $dataProvider->query->withLinks();
+                },
             ],
             'view' => [
                 'class' => ViewAction::class,
-                'findOptions' => ['with_parent' => 1],
+                'on beforePerform' => static function (Event $event): void {
+                    /** @var SearchAction $action */
+                    $action = $event->sender;
+                    $dataProvider = $action->getDataProvider();
+                    $dataProvider->query->withParent()->withLinks();
+                },
                 'data' => static function ($action) {
                     $parents = Prefix::find()->andWhere(['ip_cntd' => $action->getCollection()->first->ip])->withParent()->limit(-1)->all();
                     PrefixSort::byKinship($parents);
@@ -61,9 +72,6 @@ class AddressController extends CrudController
                 'class' => SmartCreateAction::class,
                 'success' => Yii::t('hipanel.ipam', 'IP Address was created successfully'),
                 'error' => Yii::t('hipanel.ipam', 'An error occurred when trying to add a prefix'),
-                'collectionLoader' => function ($action) {
-                    $this->collectionLoader($action->scenario, $action->collection);
-                },
                 'POST html' => [
                     'save' => true,
                     'success' => [
@@ -82,9 +90,6 @@ class AddressController extends CrudController
                     $dataProvider = $action->getDataProvider();
                     $dataProvider->query->withParent()->withLinks();
                 },
-                'collectionLoader' => function ($action) {
-                    $this->collectionLoader($action->scenario, $action->collection);
-                },
             ],
             'delete' => [
                 'class' => SmartDeleteAction::class,
@@ -99,22 +104,5 @@ class AddressController extends CrudController
                 'error' => Yii::t('hipanel.ipam', 'Failed to change description'),
             ],
         ]);
-    }
-
-    public function collectionLoader($scenario, Collection $collection): void
-    {
-        $addressModel = $this->newModel(['scenario' => $scenario]);
-        $linkModel = new Link(['scenario' => $scenario]);
-        $addressModel->load($this->request->post());
-        $ipLinks = $this->request->post($linkModel->formName(), []);
-        $ipLinkModels = [];
-        $ipLinkModels = array_pad($ipLinkModels, count($ipLinks), $linkModel);
-        Link::loadMultiple($ipLinkModels, [$linkModel->formName() => $ipLinks]);
-        foreach ($ipLinkModels as $link) {
-            if ($link->ip_id === $addressModel->id && $link->validate()) {
-                $addressModel->addLink($link);
-            }
-        }
-        $collection->set($addressModel);
     }
 }

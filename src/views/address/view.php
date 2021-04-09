@@ -1,9 +1,8 @@
 <?php
 
-use hipanel\modules\ipam\grid\PrefixGridView;
+use hipanel\modules\ipam\grid\AddressGridView;
 use hipanel\modules\ipam\menus\AddressDetailMenu;
 use hipanel\modules\ipam\models\Aggregate;
-use hipanel\modules\ipam\models\Prefix;
 use hipanel\modules\ipam\widgets\TreeGrid;
 use hipanel\widgets\MainDetails;
 use yii\data\ActiveDataProvider;
@@ -33,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
         <div class="box box-widget">
             <div class="box-body no-padding">
-                <?= PrefixGridView::detailView([
+                <?= AddressGridView::detailView([
                     'boxed' => false,
                     'model' => $model,
                     'columns' => [
@@ -42,6 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'vrf',
                         'site',
                         'tags',
+                        'link',
                         'note',
                     ],
                 ]) ?>
