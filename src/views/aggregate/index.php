@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <?php $page->beginContent('sorter-actions') ?>
             <?= $page->renderSorter([
-                'attributes' => ['id']
+                'attributes' => ['ip']
             ]) ?>
         <?php $page->endContent() ?>
 
