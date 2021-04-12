@@ -10,7 +10,7 @@ use yii\helpers\Html;
 
 class TagsColumn extends DataColumn
 {
-    public $format = 'raw';
+    public $format = 'html';
 
     public $attribute = 'tags';
 

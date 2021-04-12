@@ -17,26 +17,22 @@ class AggregateGridView extends BoxedGridView
         return array_merge(parent::columns(), [
             'ip' => [
                 'class' => MainColumn::class,
-                'format' => 'html',
                 'attribute' => 'ip',
                 'filterAttribute' => 'ip_like',
             ],
             'state' => [
                 'class' => RefColumn::class,
                 'i18nDictionary' => 'hipanel.ipam',
-                'format' => 'raw',
                 'gtype' => 'state,ip',
             ],
             'type' => [
                 'class' => RefColumn::class,
                 'i18nDictionary' => 'hipanel.ipam',
-                'format' => 'raw',
                 'gtype' => 'type,ip',
             ],
             'rir' => [
                 'class' => RefColumn::class,
                 'i18nDictionary' => 'hipanel.ipam',
-                'format' => 'raw',
                 'gtype' => 'type,ip_rir',
             ],
             'note' => [
