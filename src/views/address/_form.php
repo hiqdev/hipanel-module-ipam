@@ -1,5 +1,6 @@
 <?php
 
+use hipanel\modules\server\widgets\combo\ServerCombo;
 use hiqdev\combo\StaticCombo;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -7,7 +8,6 @@ use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $model hipanel\modules\ipam\models\Address */
-
 
 $form = ActiveForm::begin([
     'id' => 'prefix-form',
@@ -26,7 +26,7 @@ $form = ActiveForm::begin([
                 <h3 class="box-title"><?= Yii::t('hipanel.ipam', 'IP Address') ?></h3>
             </div>
             <div class="box-body">
-                <?= Html::activeHiddenInput($model, 'id') ?>
+                <?= Html::activeHiddenInput($model, 'id', ['data-attribute' => 'id']) ?>
                 <?= $form->field($model, 'ip', ['options' => ['style' => 'margin-bottom: 0;']])->hint(Yii::t('hipanel.ipam', 'IPv4 or IPv6 network with mask or specify a numeric range to create multiple IPs.')) ?>
                 <div class="help-block" style="margin: 0 0 1em;">
                     <div class="format"><?= Yii::t('hipanel.ipam', 'Format:') ?>
@@ -56,6 +56,9 @@ $form = ActiveForm::begin([
                     'hasId' => true,
                     'multiple' => true,
                 ]) ?>
+                <?php if (Yii::getAlias('@server', false)) : ?>
+                    <?= $form->field($model, 'device')->widget(ServerCombo::class, ['pluginOptions' => []]) ?>
+                <?php endif ?>
                 <?= $form->field($model, 'note')->textarea(['rows' => 2]) ?>
             </div>
         </div>

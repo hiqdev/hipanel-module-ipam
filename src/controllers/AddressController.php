@@ -12,8 +12,10 @@ use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
 use hipanel\base\CrudController;
 use hipanel\filters\EasyAccessControl;
+use hipanel\modules\hosting\models\Link;
 use hipanel\modules\ipam\helpers\PrefixSort;
 use hipanel\modules\ipam\models\Prefix;
+use hiqdev\hiart\Collection;
 use yii\base\Event;
 use yii\data\ArrayDataProvider;
 use yii\helpers\ArrayHelper;
@@ -41,10 +43,21 @@ class AddressController extends CrudController
         return array_merge(parent::actions(), [
             'index' => [
                 'class' => IndexAction::class,
+                'on beforePerform' => static function (Event $event): void {
+                    /** @var SearchAction $action */
+                    $action = $event->sender;
+                    $dataProvider = $action->getDataProvider();
+                    $dataProvider->query->withLinks();
+                },
             ],
             'view' => [
                 'class' => ViewAction::class,
-                'findOptions' => ['with_parent' => 1],
+                'on beforePerform' => static function (Event $event): void {
+                    /** @var SearchAction $action */
+                    $action = $event->sender;
+                    $dataProvider = $action->getDataProvider();
+                    $dataProvider->query->withParent()->withLinks();
+                },
                 'data' => static function ($action) {
                     $parents = Prefix::find()->andWhere(['ip_cntd' => $action->getCollection()->first->ip])->withParent()->limit(-1)->all();
                     PrefixSort::byKinship($parents);
@@ -75,7 +88,7 @@ class AddressController extends CrudController
                     /** @var SearchAction $action */
                     $action = $event->sender;
                     $dataProvider = $action->getDataProvider();
-                    $dataProvider->query->withParent();
+                    $dataProvider->query->withParent()->withLinks();
                 },
             ],
             'delete' => [
