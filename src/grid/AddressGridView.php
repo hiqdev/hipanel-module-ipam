@@ -8,7 +8,6 @@ use hipanel\modules\ipam\models\Address;
 use hiqdev\yii2\menus\grid\MenuColumn;
 use Yii;
 use yii\helpers\Html;
-use function Webmozart\Assert\Tests\StaticAnalysis\false;
 
 class AddressGridView extends PrefixGridView
 {

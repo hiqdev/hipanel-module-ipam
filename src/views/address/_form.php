@@ -56,7 +56,9 @@ $form = ActiveForm::begin([
                     'hasId' => true,
                     'multiple' => true,
                 ]) ?>
-                <?= $form->field($model, 'device')->widget(ServerCombo::class, ['pluginOptions' => []]) ?>
+                <?php if (Yii::getAlias('@server', false)) : ?>
+                    <?= $form->field($model, 'device')->widget(ServerCombo::class, ['pluginOptions' => []]) ?>
+                <?php endif ?>
                 <?= $form->field($model, 'note')->textarea(['rows' => 2]) ?>
             </div>
         </div>
