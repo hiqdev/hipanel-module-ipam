@@ -82,9 +82,7 @@ $columns = ['actions', 'ip', 'state', 'vrf', 'role', 'site', 'note'];
                 </li>
             </ul>
             <div class="tab-content" style="position: relative;">
-                <div class="overlay" style="display: none;">
-                    <i class="fa fa-refresh fa-spin"></i>
-                </div>
+                <div class="overlay" style="display: none;"></div>
                 <div class="tab-pane active" id="child_prefixes">
                     <?= TreeGrid::widget([
                         'parent' => $model,

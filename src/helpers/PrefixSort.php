@@ -18,7 +18,7 @@ class PrefixSort
         }
 
         kinship($models, null, $result);
-        $models = $result;
+        $models = empty($result) ? $models : $result;
     }
 
     public static function byCidr(array &$models): void
