@@ -21,7 +21,7 @@ class PrefixGridView extends BoxedGridView
         return array_merge(parent::columns(), [
             'ip' => [
                 'label' => Yii::t('hipanel.ipam', 'IP'),
-                'format' => 'raw',
+                'format' => 'html',
                 'attribute' => 'ip',
                 'filterAttribute' => 'ip_like',
                 'contentOptions' => ['style' => 'white-space:nowrap;'],
@@ -44,27 +44,23 @@ class PrefixGridView extends BoxedGridView
             'type' => [
                 'class' => RefColumn::class,
                 'i18nDictionary' => 'hipanel.ipam',
-                'format' => 'raw',
                 'gtype' => 'type,ip_prefix',
             ],
             'vrf' => [
                 'class' => RefColumn::class,
                 'i18nDictionary' => 'hipanel.ipam',
-                'format' => 'raw',
                 'gtype' => 'type,ip_vrf',
                 'value' => fn($model) => $model->vrf ?? $this->parent->vrf,
             ],
             'role' => [
                 'class' => RefColumn::class,
                 'i18nDictionary' => 'hipanel.ipam',
-                'format' => 'raw',
                 'gtype' => 'type,ip_prefix_role',
                 'value' => fn($model) => $model->role ?? $this->parent->role,
             ],
             'site' => [
                 'class' => RefColumn::class,
                 'i18nDictionary' => 'hipanel.ipam',
-                'format' => 'raw',
                 'gtype' => 'type,location',
                 'value' => fn($model) => $model->site ?? $this->parent->site,
             ],

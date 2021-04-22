@@ -9,7 +9,7 @@ use yii\helpers\Html;
 
 class UtilizationColumn extends DataColumn
 {
-    public $format = 'raw';
+    public $format = 'html';
 
     public $filter = false;
 
