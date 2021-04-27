@@ -13,6 +13,7 @@ use hipanel\actions\ViewAction;
 use hipanel\base\CrudController;
 use hipanel\filters\EasyAccessControl;
 use hipanel\modules\hosting\models\Link;
+use hipanel\modules\ipam\actions\AddressDeleteAction;
 use hipanel\modules\ipam\helpers\PrefixSort;
 use hipanel\modules\ipam\models\Prefix;
 use hiqdev\hiart\Collection;
@@ -92,7 +93,7 @@ class AddressController extends CrudController
                 },
             ],
             'delete' => [
-                'class' => SmartDeleteAction::class,
+                'class' => AddressDeleteAction::class,
                 'success' => Yii::t('hipanel.ipam', 'IP Address was deleted successfully'),
             ],
             'validate-form' => [
