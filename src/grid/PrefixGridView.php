@@ -21,21 +21,22 @@ class PrefixGridView extends BoxedGridView
         return array_merge(parent::columns(), [
             'ip' => [
                 'label' => Yii::t('hipanel.ipam', 'IP'),
-                'format' => 'html',
+                'format' => 'raw',
                 'attribute' => 'ip',
                 'filterAttribute' => 'ip_like',
                 'contentOptions' => ['style' => 'white-space:nowrap;'],
                 'value' => function (Prefix $prefix) {
-                    if ($prefix->isSuggested()) {
-                        return Html::a($prefix->ip, [
+                    $ip = Html::encode($prefix->ip);
+                    if ($prefix->isSuggersted()) {
+                        return Html::a($ip, [
                             '@prefix/create',
-                            'ip' => $prefix->ip,
-                            'vrf' => $this->parent->vrf,
-                            'role' => $this->parent->role,
-                            'site' => $this->parent->site,
+                            'ip' => $ip,
+                            'vrf' => Html::encode($this->parent->vrf),
+                            'role' => Html::encode($this->parent->role),
+                            'site' => Html::encode($this->parent->site),
                         ], ['class' => 'text-bold']);
                     }
-                    $ip = Html::a($prefix->ip, ['@prefix/view', 'id' => $prefix->id], ['class' => 'text-bold']);
+                    $ip = Html::a($ip, ['@prefix/view', 'id' => $prefix->id], ['class' => 'text-bold']);
                     $tags = TagsColumn::renderTags($prefix);
 
                     return implode('<br>', array_filter([$ip, $tags], static fn(string $entry): bool => $entry !== ''));
@@ -84,21 +85,21 @@ class PrefixGridView extends BoxedGridView
             ],
             'aggregate' => [
                 'attribute' => 'aggregate',
-                'format' => 'html',
+                'format' => 'raw',
                 'value' => static function ($prefix): string {
                     return $prefix->aggregate ?
-                        Html::a($prefix->aggregate, ['@aggregate/view', 'id' => $prefix->aggregate_id]) :
+                        Html::a(Html::encode($prefix->aggregate), ['@aggregate/view', 'id' => $prefix->aggregate_id]) :
                         '';
                 },
             ],
             'ip_count' => [
                 'attribute' => 'ip_count',
                 'label' => Yii::t('hipanel.ipam', 'IP Addresses'),
-                'format' => 'html',
+                'format' => 'raw',
                 'value' => static function ($prefix): string {
                     return $prefix->ip_count > 0 ?
                         Html::a('IP Addresses (' . $prefix->ip_count . ')', [
-                            '@address/index', (new AddressSearch)->formName() => ['ip_cnts' => $prefix->ip],
+                            '@address/index', (new AddressSearch)->formName() => ['ip_cnts' => Html::encode($prefix->ip)],
                         ], ['class' => 'btn btn-success btn-flat btn-sm']) :
                         $prefix->ip_count;
                 },
