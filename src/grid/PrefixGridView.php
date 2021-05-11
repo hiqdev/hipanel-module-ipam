@@ -27,7 +27,7 @@ class PrefixGridView extends BoxedGridView
                 'contentOptions' => ['style' => 'white-space:nowrap;'],
                 'value' => function (Prefix $prefix) {
                     $ip = Html::encode($prefix->ip);
-                    if ($prefix->isSuggersted()) {
+                    if ($prefix->isSuggested()) {
                         return Html::a($ip, [
                             '@prefix/create',
                             'ip' => $ip,
