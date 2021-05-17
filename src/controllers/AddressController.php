@@ -77,7 +77,9 @@ class AddressController extends CrudController
                     'save' => true,
                     'success' => [
                         'class' => RedirectAction::class,
-                        'url' => 'index',
+                        'url'   => fn($action) => $action->collection->count() > 1 ?
+                            $action->controller->getSearchUrl() :
+                            $action->controller->getActionUrl('view', ['id' => $action->model->id]),
                     ],
                 ],
             ],
