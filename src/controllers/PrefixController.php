@@ -63,14 +63,8 @@ class PrefixController extends CrudController
                             'pageSize' => -1,
                         ],
                     ]);
-                    $parents = Prefix::find()
-                        ->andWhere(['ip_cntd' => $model->ip, 'vrf' => $model->vrf])
-                        ->withParent()
-                        ->limit(-1)
-                        ->all();
-                    PrefixSort::byKinship($parents);
                     $parentDataProvider = new ArrayDataProvider([
-                        'allModels' => $parents,
+                        'allModels' => [$model->parent],
                         'pagination' => [
                             'pageSize' => -1,
                         ],
