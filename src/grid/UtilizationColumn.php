@@ -9,7 +9,7 @@ use yii\helpers\Html;
 
 class UtilizationColumn extends DataColumn
 {
-    public $format = 'html';
+    public $format = 'raw';
 
     public $filter = false;
 
@@ -21,7 +21,7 @@ class UtilizationColumn extends DataColumn
 
     public function getDataCellValue($model, $key, $index)
     {
-        $prc = $model->utilization ?? 0;
+        $prc = (int)$model->utilization ?? 0;
         switch ($prc) {
             case $prc >= 0 && $prc <= 40:
                 $level = 'progress-bar-success';
