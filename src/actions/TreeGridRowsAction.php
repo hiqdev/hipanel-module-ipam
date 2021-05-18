@@ -6,6 +6,7 @@ use hipanel\actions\Action;
 use hipanel\modules\ipam\grid\PrefixGridView;
 use hipanel\modules\ipam\helpers\PrefixSort;
 use hipanel\modules\ipam\models\Prefix;
+use hipanel\modules\ipam\models\PrefixSearch;
 use Yii;
 use yii\data\ArrayDataProvider;
 use yii\web\Response;
@@ -36,12 +37,14 @@ class TreeGridRowsAction extends Action
             'dataProvider' => $dp,
             'columns' => $this->columns,
             'layout' => '{items}{pager}',
-            'filterModel' => new Prefix(),
+            'filterModel' => new PrefixSearch(),
             'rowOptions' => static fn(Prefix $prefix, $key): array => [
                 'data' => [
+                    'key' => $prefix->id,
                     'tt-id' => $prefix->id,
                     'tt-parent-id' => $prefix->parent_id ?? $id,
                     'tt-branch' => $prefix->child_count > 0 ? 'true' : 'false',
+                    'is-suggested' => $prefix->isSuggested() ? 1 : 0,
                 ],
                 'class' => sprintf("%s", $prefix->isSuggested() ? 'success' : ''),
             ],

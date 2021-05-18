@@ -5,6 +5,7 @@ namespace hipanel\modules\ipam\widgets;
 use hipanel\assets\TreeTable;
 use hipanel\modules\ipam\grid\PrefixGridView;
 use hipanel\modules\ipam\models\Prefix;
+use hipanel\modules\ipam\models\PrefixSearch;
 use yii\base\Widget;
 use yii\data\DataProviderInterface;
 use yii\helpers\Json;
@@ -43,12 +44,14 @@ class TreeGrid extends Widget
             'parent' => $this->parent,
             'dataProvider' => $this->dataProvider,
             'layout' => '{items}{pager}',
-            'filterModel' => new Prefix(),
+            'filterModel' => new PrefixSearch(),
             'rowOptions' => static fn(Prefix $prefix, $key): array => [
                 'data' => [
+                    'key' => $prefix->id,
                     'tt-id' => $prefix->id,
                     'tt-parent-id' => $prefix->parent_id ?? 0,
                     'tt-branch' => $prefix->child_count == 0 ? 'false' : 'true',
+                    'is-suggested' => $prefix->isSuggested() ? 1 : 0,
                 ],
                 'class' => sprintf("%s", $prefix->isSuggested() ? 'success' : ''),
             ],
@@ -64,6 +67,45 @@ class TreeGrid extends Widget
         $includeSuggestions = Json::htmlEncode($this->includeSuggestions ? 1 : 0);
         $id = $this->getId();
         $url = $this->url;
+        $this->view->registerJs("(() => {
+            const grid = $('#$id');
+            const bulkBtns = $(document).find('.btn-bulk');
+            grid.find(':checkbox').on('change', function () {
+                let cnt = grid.find(':checkbox').filter(':checked').length;
+                if (cnt > 0) {
+                    bulkBtns.attr('disabled', false);
+                }
+                if (cnt === 0) {
+                    bulkBtns.attr('disabled', true);
+                }
+            });
+            bulkBtns.on('click', function (event) {
+                event.preventDefault();
+                const selection = [];
+                grid.find(':checkbox').filter(':checked').each(function () {
+                    if (this.name === 'selection_all') {
+                      return;
+                    }
+                    const row = $(this).parent().closest('tr');
+                    if (row.data('isSuggested') == 0) {
+                        selection.push(row.data('key'));
+                    }
+                });
+                bulkBtns.attr('disabled', true);
+                grid.find(':checkbox').filter(':checked').removeAttr('checked');
+                if (selection.length === 0) {
+                  return;
+                }
+                $.ajax({
+                    method: 'POST',
+                    async: false,
+                    url: event.target.dataset.action,
+                    data: {
+                        selection: selection
+                    }
+                });
+            });
+        })()", View::POS_LOAD);
         if ($this->showAll) {
             $this->view->registerJs("
               $('#{$id}').treetable({$options});
