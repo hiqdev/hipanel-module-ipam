@@ -74,6 +74,17 @@ $columns = ['actions', 'ip', 'state', 'vrf', 'role', 'site', 'note'];
                     </a>
                 </li>
                 <li class="pull-right">
+                    <?= Html::button(
+                        Yii::t('hipanel.ipam', 'Delete'),
+                        [
+                            'class' => 'btn bg-maroon btn-bulk',
+                            'disabled' => true,
+                            'data-action' => Url::to(['@prefix/delete']),
+                            'style' => 'padding: 5px 10px; font-size: 12px; border-radius: 3px; margin-top: 4px;'
+                        ]
+                    ) ?>
+                </li>
+                <li class="pull-right">
                     <?= Html::a(
                         Yii::t('hipanel.ipam', 'Add a new prefix'),
                         ['@prefix/create'],
@@ -89,7 +100,7 @@ $columns = ['actions', 'ip', 'state', 'vrf', 'role', 'site', 'note'];
                         'dataProvider' => $childPrefixesDataProvider,
                         'showAll' => false,
                         'includeSuggestions' => true,
-                        'columns' => ['ip', 'state', 'vrf', 'role', 'utilization', 'site', 'text_note'],
+                        'columns' => ['ip', 'state', 'vrf', 'role', 'utilization', 'site', 'text_note', 'checkbox'],
                     ]) ?>
                 </div>
                 <div class="tab-pane" id="parent_prefixes">

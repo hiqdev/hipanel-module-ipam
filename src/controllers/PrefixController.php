@@ -64,7 +64,7 @@ class PrefixController extends CrudController
                         ],
                     ]);
                     $parentDataProvider = new ArrayDataProvider([
-                        'allModels' => [$model->parent],
+                        'allModels' => $model->parent->id ? [$model->parent] : [],
                         'pagination' => [
                             'pageSize' => -1,
                         ],
@@ -113,7 +113,7 @@ class PrefixController extends CrudController
             ],
             'get-tree-grid-rows' => [
                 'class' => TreeGridRowsAction::class,
-                'columns' => ['ip', 'state', 'vrf', 'role', 'utilization', 'site', 'text_note'],
+                'columns' => ['ip', 'state', 'vrf', 'role', 'utilization', 'site', 'text_note', 'checkbox'],
             ],
         ]);
     }
