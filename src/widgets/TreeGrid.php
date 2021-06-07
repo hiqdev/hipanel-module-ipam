@@ -6,6 +6,7 @@ use hipanel\assets\TreeTable;
 use hipanel\modules\ipam\grid\PrefixGridView;
 use hipanel\modules\ipam\models\Prefix;
 use hipanel\modules\ipam\models\PrefixSearch;
+use Yii;
 use yii\base\Widget;
 use yii\data\DataProviderInterface;
 use yii\helpers\Json;
@@ -67,6 +68,8 @@ class TreeGrid extends Widget
         $includeSuggestions = Json::htmlEncode($this->includeSuggestions ? 1 : 0);
         $id = $this->getId();
         $url = $this->url;
+        $csrfName = Yii::$app->request->csrfParam;
+        $csrfToken = Yii::$app->request->csrfToken;
         $this->view->registerJs("(() => {
             const grid = $('#$id');
             const bulkBtns = $(document).find('.btn-bulk');
@@ -96,14 +99,22 @@ class TreeGrid extends Widget
                 if (selection.length === 0) {
                   return;
                 }
-                $.ajax({
-                    method: 'POST',
-                    async: false,
-                    url: event.target.dataset.action,
-                    data: {
-                        selection: selection
-                    }
+                const form = document.createElement('form');
+                document.body.appendChild(form);
+                form.method = 'POST';
+                form.action = event.target.dataset.action;
+                function addInput(name, value) {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = name;
+                    input.value = value;
+                    form.appendChild(input);
+                }
+                addInput('$csrfName', '$csrfToken');
+                selection.forEach((id) => {
+                    addInput('selection[]', id);
                 });
+                form.submit();
             });
         })()", View::POS_LOAD);
         if ($this->showAll) {

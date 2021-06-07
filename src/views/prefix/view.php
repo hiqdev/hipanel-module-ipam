@@ -75,7 +75,16 @@ $columns = ['actions', 'ip', 'state', 'vrf', 'role', 'site', 'note'];
                 </li>
                 <li class="pull-right">
                     <?= Html::button(
-                        Yii::t('hipanel.ipam', 'Delete'),
+                        Yii::t('hipanel', 'Update'),
+                        [
+                            'class' => 'btn bg-olive btn-bulk',
+                            'disabled' => true,
+                            'data-action' => Url::to(['@prefix/update']),
+                            'style' => 'padding: 5px 10px; font-size: 12px; border-radius: 3px; margin-top: 4px;'
+                        ]
+                    ) ?>
+                    <?= Html::button(
+                        Yii::t('hipanel', 'Delete'),
                         [
                             'class' => 'btn bg-maroon btn-bulk',
                             'disabled' => true,
