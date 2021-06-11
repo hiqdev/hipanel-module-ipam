@@ -15,26 +15,27 @@ class AddressGridView extends PrefixGridView
     {
         return array_merge(parent::columns(), [
             'ip' => [
-                'format' => 'html',
+                'format' => 'raw',
                 'attribute' => 'ip',
                 'filterAttribute' => 'ip_like',
                 'value' => static function ($address) {
-                    $ip = Html::a($address->ip, ['@address/view', 'id' => $address->id], ['class' => 'text-bold']);
+                    $ip = Html::a(Html::encode($address->ip), ['@address/view', 'id' => $address->id], ['class' => 'text-bold']);
                     $tags = TagsColumn::renderTags($address);
 
                     return implode('<br>', [$ip, $tags]);
                 },
             ],
             'link' => [
-                'format' => 'html',
+                'format' => 'raw',
                 'attribute' => 'device',
                 'enableSorting' => false,
                 'value' => static function (Address $address) {
+                    $device = Html::encode($address->device);
                     if (Yii::getAlias('@server', false)) {
-                        return Html::a($address->device, ['@server/view', 'id' => $address->device_id]);
+                        return Html::a($device, ['@server/view', 'id' => $address->device_id]);
                     }
 
-                    return $address->device;
+                    return $device;
                 }
             ],
             'note' => [
