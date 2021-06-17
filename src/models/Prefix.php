@@ -8,6 +8,7 @@ use hipanel\models\Ref;
 use hipanel\modules\ipam\models\query\PrefixQuery;
 use hipanel\modules\ipam\models\traits\IPBlockTrait;
 use Yii;
+use yii\db\Query;
 use yii\db\QueryInterface;
 
 class Prefix extends Model
@@ -22,6 +23,14 @@ class Prefix extends Model
             [['note', 'vrf', 'role', 'site', 'state', 'type', 'client', 'seller', 'vlan_group', 'vlan', 'aggregate'], 'string'],
             [['parent_ip'], 'ip'],
             [['tags'], 'safe'],
+
+            [['ip'], 'unique', 'targetAttribute' => ['ip', 'vrf'],
+                'filter' => function (Query $query): void {
+                    $query->andWhere(['ne', 'id', $this->id]);
+                },
+                'message' => Yii::t('hipanel.ipam', 'The combination IP and VRF has already been taken.'),
+                'on' => ['create', 'update']
+            ],
 
             [['ip', 'vrf'], 'required', 'on' => ['create', 'update']],
             [['id', 'note'], 'required', 'on' => ['set-note']],
