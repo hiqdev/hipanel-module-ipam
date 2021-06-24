@@ -15,7 +15,6 @@ use hipanel\modules\ipam\actions\TreeGridRowsAction;
 use hipanel\modules\ipam\helpers\PrefixSort;
 use hipanel\modules\ipam\models\Prefix;
 use hipanel\modules\ipam\models\query\PrefixQuery;
-use hiqdev\hiart\ActiveQuery;
 use yii\base\Event;
 use yii\data\ArrayDataProvider;
 use yii\helpers\ArrayHelper;
@@ -58,14 +57,19 @@ class PrefixController extends CrudController
                     $event->sender->getDataProvider()->query->withParent();
                 },
                 'data' => static function ($action): array {
+                    /** @var Prefix $model */
                     $model = $action->getCollection()->first;
-                    $children = Prefix::find()
+                    $query = Prefix::find()
                         ->andWhere(['ip_cnts' => $model->ip, 'vrf' => $model->vrf])
-                        ->includeSuggestions()
                         ->withParent()
                         ->firstbornOnly()
-                        ->limit(-1)
-                        ->all();
+                        ->limit(-1);
+
+                    if ($model->type !== Prefix::TYPE_ACTIVE) {
+                        $query->includeSuggestions();
+                    }
+
+                    $children = $query->all();
                     PrefixSort::byCidr($children);
                     $childDataProvider = new ArrayDataProvider([
                         'allModels' => $children,

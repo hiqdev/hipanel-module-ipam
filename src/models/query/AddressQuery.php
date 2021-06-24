@@ -34,4 +34,18 @@ class AddressQuery extends ActiveQuery
 
         return $this;
     }
+
+    public function includeSuggestions(): self
+    {
+        $this->andWhere(['include_suggestions' => true]);
+
+        return $this;
+    }
+
+    public function firstbornOnly(): self
+    {
+        $this->andWhere(['firstborn' => true]);
+
+        return $this;
+    }
 }

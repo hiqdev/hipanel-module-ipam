@@ -46,11 +46,7 @@ class Address extends Prefix
         ]);
     }
 
-    /**
-     * {@inheritdoc}
-     * @return QueryInterface
-     */
-    public static function find(array $options = []): QueryInterface
+    public static function find(array $options = []): AddressQuery
     {
         return new AddressQuery(get_called_class(), [
             'options' => $options,

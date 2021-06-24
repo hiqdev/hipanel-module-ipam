@@ -11,9 +11,19 @@ use Yii;
 use yii\db\Query;
 use yii\db\QueryInterface;
 
+/**
+ * @property string ip
+ * @property string vrf
+ * @property Prefix|null parent
+ * @property string type
+ * @property int id
+ */
 class Prefix extends Model
 {
     use ModelTrait, IPBlockTrait;
+
+    const TYPE_ACTIVE = 'active';
+    const TYPE_CONTAINER = 'container';
 
     /** {@inheritdoc} */
     public function rules()
