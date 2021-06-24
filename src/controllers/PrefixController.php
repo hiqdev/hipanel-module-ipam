@@ -73,15 +73,21 @@ class PrefixController extends CrudController
                     PrefixSort::byCidr($children);
                     $childDataProvider = new ArrayDataProvider([
                         'allModels' => $children,
-                        'pagination' => [
-                            'pageSize' => -1,
-                        ],
+                        'pagination' => false,
                     ]);
+
+                    if ($model->parent->id) {
+                        $parents = Prefix::find()
+                            ->andWhere(['ip_cntd' => $model->ip, 'vrf' => $model->vrf])
+                            ->withParent()
+                            ->limit(-1)->all();
+
+                        PrefixSort::byKinship($parents);
+                    }
+
                     $parentDataProvider = new ArrayDataProvider([
-                        'allModels' => $model->parent->id ? [$model->parent] : [],
-                        'pagination' => [
-                            'pageSize' => -1,
-                        ],
+                        'allModels' => $parents ?? [],
+                        'pagination' => false,
                     ]);
 
                     return [

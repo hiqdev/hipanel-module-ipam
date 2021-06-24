@@ -115,7 +115,6 @@ $columns = ['actions', 'ip', 'state', 'vrf', 'role', 'site', 'note'];
                 <div class="tab-pane" id="parent_prefixes">
                     <?= TreeGrid::widget([
                         'dataProvider' => $parentPrefixesDataProvider,
-                        'showAll' => false,
                         'columns' => ['ip', 'state', 'vrf', 'role', 'utilization', 'site', 'text_note'],
                     ]) ?>
                 </div>

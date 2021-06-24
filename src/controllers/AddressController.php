@@ -86,6 +86,7 @@ class AddressController extends CrudController
                     PrefixSort::byKinship($parents);
                     $parentDataProvider = new ArrayDataProvider([
                         'allModels' => $parents,
+                        'pagination' => false,
                     ]);
 
                     return ['parentPrefixesDataProvider' => $parentDataProvider];
