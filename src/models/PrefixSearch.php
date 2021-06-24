@@ -26,6 +26,7 @@ class PrefixSearch extends Prefix
             'include_suggestions',
             'firstborn',
             'family',
+            'no_parent',
         ]);
     }
 
@@ -34,6 +35,7 @@ class PrefixSearch extends Prefix
     {
         return $this->mergeAttributeLabels([
             'family' => Yii::t('hipanel.ipam', 'Family'),
+            'no_parent' => Yii::t('hipanel.ipam', 'Root prefixes only'),
         ]);
     }
 }

@@ -14,6 +14,8 @@ use hipanel\filters\EasyAccessControl;
 use hipanel\modules\ipam\actions\TreeGridRowsAction;
 use hipanel\modules\ipam\helpers\PrefixSort;
 use hipanel\modules\ipam\models\Prefix;
+use hipanel\modules\ipam\models\query\PrefixQuery;
+use hiqdev\hiart\ActiveQuery;
 use yii\base\Event;
 use yii\data\ArrayDataProvider;
 use yii\helpers\ArrayHelper;
@@ -41,6 +43,14 @@ class PrefixController extends CrudController
         return array_merge(parent::actions(), [
             'index' => [
                 'class' => IndexAction::class,
+                'on beforePerform' => function (Event $event) {
+                    /** @var PrefixQuery $query */
+                    $query = $event->sender->getDataProvider()->query;
+
+                    if (count($query->where) === 1 && isset($query->where['is_ip'])) {
+                        $query->noParent();
+                    }
+                },
             ],
             'view' => [
                 'class' => ViewAction::class,

@@ -15,6 +15,10 @@ use yii\web\View;
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
+    <?= $search->field('no_parent')->checkbox(['uncheck' => '']) ?>
+</div>
+
+<div class="col-md-4 col-sm-6 col-xs-12">
     <?= $search->field('type')->dropDownList($this->context->getRefs('type,ip_prefix', 'hipanel.ipam'), ['prompt' => $search->model->getAttributeLabel('type')]) ?>
 </div>
 
