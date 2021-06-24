@@ -15,6 +15,16 @@ use yii\web\View;
 </div>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
+    <?= $search->field('ip_cnts') ?>
+</div>
+
+<?php if (!empty($search->model->ip_cnts)): ?>
+    <div class="col-md-4 col-sm-6 col-xs-12">
+        <?= $search->field('with_suggestions')->checkbox(['unselect' => '']) ?>
+    </div>
+<?php endif ?>
+
+<div class="col-md-4 col-sm-6 col-xs-12">
     <?= $search->field('tags')->dropDownList($search->model->getTagOptions(), ['prompt' => $search->model->getAttributeLabel('tags')]) ?>
 </div>
 

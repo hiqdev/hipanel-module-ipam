@@ -30,9 +30,11 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php $page->endContent() ?>
 
         <?php $page->beginContent('sorter-actions') ?>
-            <?= $page->renderSorter([
-                'attributes' => ['ip']
-            ]) ?>
+            <?php if (!$dataProvider instanceof ArrayDataProvider): ?>
+                <?= $page->renderSorter([
+                    'attributes' => ['ip']
+                ]) ?>
+            <?php endif ?>
         <?php $page->endContent() ?>
 
         <?php $page->beginContent('bulk-actions') ?>
@@ -46,6 +48,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     'dataProvider' => $dataProvider,
                     'filterModel' => $model,
                     'columns' => $representationCollection->getByName($uiModel->representation)->getColumns(),
+                    'rowOptions' => static fn(Address $prefix, $key): array => [
+                        'class' => sprintf("%s", $prefix->isSuggested() ? 'success' : ''),
+                    ],
                 ]) ?>
             <?php $page->endBulkForm() ?>
         <?php $page->endContent() ?>

@@ -4,19 +4,18 @@ namespace hipanel\modules\ipam\controllers;
 
 use hipanel\actions\IndexAction;
 use hipanel\actions\RedirectAction;
+use hipanel\actions\RenderAction;
 use hipanel\actions\SearchAction;
 use hipanel\actions\SmartCreateAction;
-use hipanel\actions\SmartDeleteAction;
 use hipanel\actions\SmartUpdateAction;
 use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
 use hipanel\base\CrudController;
 use hipanel\filters\EasyAccessControl;
-use hipanel\modules\hosting\models\Link;
 use hipanel\modules\ipam\actions\AddressDeleteAction;
 use hipanel\modules\ipam\helpers\PrefixSort;
 use hipanel\modules\ipam\models\Prefix;
-use hiqdev\hiart\Collection;
+use hipanel\modules\ipam\models\query\AddressQuery;
 use yii\base\Event;
 use yii\data\ArrayDataProvider;
 use yii\helpers\ArrayHelper;
@@ -47,8 +46,31 @@ class AddressController extends CrudController
                 'on beforePerform' => static function (Event $event): void {
                     /** @var SearchAction $action */
                     $action = $event->sender;
-                    $dataProvider = $action->getDataProvider();
-                    $dataProvider->query->withLinks();
+                    /** @var AddressQuery $query */
+                    $query = $action->getDataProvider()->query;
+                    $query->withLinks();
+
+                    if ($action->getSearchModel()->with_suggestions) {
+                        $action->getDataProvider()->pagination = false;
+                        $query->limit(-1);
+                        $query->includeSuggestions();
+                    }
+                },
+                'data' => static function (RenderAction $action): array {
+                    /** @var IndexAction $indexAction */
+                    $indexAction = $action->parent;
+                    if ($indexAction->getSearchModel()->with_suggestions) {
+                        $models = $indexAction->getDataProvider()->models;
+                        PrefixSort::byCidr($models);
+                        return [
+                            'dataProvider' => new ArrayDataProvider([
+                                'allModels' => $models,
+                                'pagination' => false,
+                            ])
+                        ];
+                    }
+
+                    return [];
                 },
             ],
             'view' => [

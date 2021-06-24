@@ -25,6 +25,7 @@ class AddressSearch extends Address
             'ip_cnts_eql',
             'ip_cnts_cntd',
             'family',
+            'with_suggestions',
         ]);
     }
 
@@ -33,6 +34,8 @@ class AddressSearch extends Address
     {
         return $this->mergeAttributeLabels([
             'family' => Yii::t('hipanel.ipam', 'Family'),
+            'ip_cnts' => Yii::t('hipanel.ipam', 'Parent prefix'),
+            'with_suggestions' => Yii::t('hipanel.ipam', 'With suggestions'),
         ]);
     }
 }

@@ -18,8 +18,16 @@ class AddressGridView extends PrefixGridView
                 'format' => 'raw',
                 'attribute' => 'ip',
                 'filterAttribute' => 'ip_like',
-                'value' => static function ($address) {
-                    $ip = Html::a(Html::encode($address->ip), ['@address/view', 'id' => $address->id], ['class' => 'text-bold']);
+                'value' => static function (Address $address) {
+                    $ip = Html::encode($address->ip);
+                    if ($address->isSuggested()) {
+                        return Html::a($ip, [
+                            '@address/create',
+                            'ip' => $ip,
+                        ], ['class' => 'text-bold']);
+                    }
+
+                    $ip = Html::a($ip, ['@address/view', 'id' => $address->id], ['class' => 'text-bold']);
                     $tags = TagsColumn::renderTags($address);
 
                     return implode('<br>', [$ip, $tags]);
