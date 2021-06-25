@@ -123,6 +123,7 @@ class AddressController extends CrudController
             ],
             'validate-form' => [
                 'class' => ValidateFormAction::class,
+                'validatedInputId' => false,
             ],
             'set-note' => [
                 'class' => SmartUpdateAction::class,
