@@ -6,6 +6,7 @@ use hipanel\grid\XEditableColumn;
 use hipanel\modules\ipam\menus\AddressActionsMenu;
 use hipanel\modules\ipam\models\Address;
 use hiqdev\yii2\menus\grid\MenuColumn;
+use PhpIP\IPBlock;
 use Yii;
 use yii\helpers\Html;
 
@@ -19,15 +20,16 @@ class AddressGridView extends PrefixGridView
                 'attribute' => 'ip',
                 'filterAttribute' => 'ip_like',
                 'value' => static function (Address $address) {
-                    $ip = Html::encode($address->ip);
                     if ($address->isSuggested()) {
-                        return Html::a($ip, [
-                            '@address/create',
-                            'ip' => $ip,
-                        ], ['class' => 'text-bold']);
+                        $block = $address->getIPBlock();
+                        $ip = $block->count() === 1
+                            ? $block->getFirstIp()->__toString()
+                            : $block->__toString();
+
+                        return Html::a($ip, ['@address/create', 'ip' => $ip], ['class' => 'text-bold']);
                     }
 
-                    $ip = Html::a($ip, ['@address/view', 'id' => $address->id], ['class' => 'text-bold']);
+                    $ip = Html::a(Html::encode($address->ip), ['@address/view', 'id' => $address->id], ['class' => 'text-bold']);
                     $tags = TagsColumn::renderTags($address);
 
                     return implode('<br>', [$ip, $tags]);

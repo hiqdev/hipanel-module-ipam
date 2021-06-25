@@ -38,6 +38,7 @@ class AddressQuery extends ActiveQuery
     public function includeSuggestions(): self
     {
         $this->andWhere(['include_suggestions' => true]);
+        $this->andWhere(['suggest_only_ip_addresses' => true]);
 
         return $this;
     }
