@@ -129,7 +129,6 @@ class TreeGrid extends Widget
         if ($this->showAll) {
             $this->view->registerJs("
               $('#{$id}').treetable({$options});
-              $('#{$id}').treetable('expandAll');
             ", View::POS_LOAD);
         } else {
             $this->view->registerJs("
@@ -178,6 +177,7 @@ class TreeGrid extends Widget
             'expandable' => true,
             'indent' => 11,
             'expanderTemplate' => '<a href="#" class="fa fa-fw">&nbsp;</a>',
+            'initialState' => $this->showAll ? 'expanded' : 'collapsed',
         ];
         if (!$this->showAll) {
             $options['onNodeExpand'] = new JsExpression("tte_{$this->getId()}");
