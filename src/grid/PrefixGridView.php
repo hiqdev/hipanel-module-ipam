@@ -8,12 +8,15 @@ use hipanel\grid\XEditableColumn;
 use hipanel\modules\ipam\menus\PrefixActionsMenu;
 use hipanel\modules\ipam\models\AddressSearch;
 use hipanel\modules\ipam\models\Prefix;
+use hipanel\widgets\gridLegend\ColorizeGrid;
 use hiqdev\yii2\menus\grid\MenuColumn;
 use Yii;
 use yii\helpers\Html;
 
 class PrefixGridView extends BoxedGridView
 {
+    use ColorizeGrid;
+
     public ?Prefix $parent = null;
 
     public function columns()

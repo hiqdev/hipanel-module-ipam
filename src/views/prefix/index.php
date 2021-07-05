@@ -1,8 +1,10 @@
 <?php
 
 use hipanel\models\IndexPageUiOptions;
+use hipanel\modules\ipam\grid\PrefixGridLegend;
 use hipanel\modules\ipam\grid\PrefixGridView;
 use hipanel\modules\ipam\models\Aggregate;
+use hipanel\widgets\gridLegend\GridLegend;
 use hipanel\widgets\IndexPage;
 use hipanel\widgets\Pjax;
 use hiqdev\higrid\representations\RepresentationCollection;
@@ -22,6 +24,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?php Pjax::begin(array_merge(Yii::$app->params['pjax'], ['enablePushState' => true])) ?>
     <?php $page = IndexPage::begin(compact('model', 'dataProvider')) ?>
+
+        <?php $page->beginContent('legend') ?>
+            <?= GridLegend::widget(['legendItem' => new PrefixGridLegend($model)]) ?>
+        <?php $page->endContent() ?>
 
         <?php $page->setSearchFormData(compact(['stateData'])) ?>
 
@@ -47,6 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'dataProvider' => $dataProvider,
                     'filterModel' => $model,
                     'columns' => $representationCollection->getByName($uiModel->representation)->getColumns(),
+                    'colorize' => true,
                 ]) ?>
             <?php $page->endBulkForm() ?>
         <?php $page->endContent() ?>
