@@ -59,7 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= TreeGrid::widget([
                     'dataProvider' => $childPrefixesDataProvider,
                     'showAll' => false,
-                    'columns' => ['ip', 'state', 'vrf', 'utilization', 'role', 'text_note'],
+                    'columns' => ['ip', 'vrf', 'utilization', 'role', 'text_note'],
                 ]) ?>
             <?php $page->endBulkForm() ?>
         <?php $page->endContent() ?>

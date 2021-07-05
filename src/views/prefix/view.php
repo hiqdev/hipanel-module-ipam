@@ -21,7 +21,6 @@ use yii\web\View;
 $this->title = Html::encode($model->ip);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('hipanel.ipam', 'Prefixes'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
-$columns = ['actions', 'ip', 'state', 'vrf', 'role', 'site', 'note'];
 
 ?>
 
@@ -109,13 +108,13 @@ $columns = ['actions', 'ip', 'state', 'vrf', 'role', 'site', 'note'];
                         'dataProvider' => $childPrefixesDataProvider,
                         'showAll' => false,
                         'includeSuggestions' => true,
-                        'columns' => ['ip', 'state', 'vrf', 'role', 'utilization', 'site', 'text_note', 'checkbox'],
+                        'columns' => ['ip', 'vrf', 'role', 'utilization', 'site', 'text_note', 'checkbox'],
                     ]) ?>
                 </div>
                 <div class="tab-pane" id="parent_prefixes">
                     <?= TreeGrid::widget([
                         'dataProvider' => $parentPrefixesDataProvider,
-                        'columns' => ['ip', 'state', 'vrf', 'role', 'utilization', 'site', 'text_note'],
+                        'columns' => ['ip', 'vrf', 'role', 'utilization', 'site', 'text_note'],
                     ]) ?>
                 </div>
             </div>
