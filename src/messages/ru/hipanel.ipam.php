@@ -77,5 +77,6 @@ return [
     'VRF' => '',
     'Virtual Routing and Forwarding' => '',
     '{v4}, {v6}, {r4}, {r6}' => '',
-    'Root prefixes only' => 'Только корневые префиксы'
+    'Root prefixes only' => 'Только корневые префиксы',
+    'Parent' => 'Родитель',
 ];

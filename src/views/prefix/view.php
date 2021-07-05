@@ -4,7 +4,7 @@ use hipanel\helpers\Url;
 use hipanel\modules\ipam\grid\PrefixGridView;
 use hipanel\modules\ipam\menus\PrefixDetailMenu;
 use hipanel\modules\ipam\models\AddressSearch;
-use hipanel\modules\ipam\models\Aggregate;
+use hipanel\modules\ipam\models\Prefix;
 use hipanel\modules\ipam\widgets\TreeGrid;
 use hipanel\widgets\MainDetails;
 use yii\data\ActiveDataProvider;
@@ -13,7 +13,7 @@ use yii\web\View;
 
 /**
  * @var View $this
- * @var Aggregate $model
+ * @var Prefix $model
  * @var ActiveDataProvider[] $parentPrefixesDataProvider
  * @var ActiveDataProvider[] $childPrefixesDataProvider
  */
@@ -43,6 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'type',
                         'vrf',
                         'aggregate',
+                        'parent',
                         'role',
                         'site',
                         'utilization',

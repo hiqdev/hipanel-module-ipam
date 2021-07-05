@@ -22,8 +22,8 @@ class Prefix extends Model
 {
     use ModelTrait, IPBlockTrait;
 
-    const TYPE_ACTIVE = 'active';
-    const TYPE_CONTAINER = 'container';
+    public const TYPE_ACTIVE = 'active';
+    public const TYPE_CONTAINER = 'container';
 
     /** {@inheritdoc} */
     public function rules()

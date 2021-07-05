@@ -68,6 +68,17 @@ class PrefixGridView extends BoxedGridView
                 'gtype' => 'type,location',
                 'value' => fn($model) => $model->site ?? $this->parent->site,
             ],
+            'parent' => [
+                'format' => 'raw',
+                'label' => Yii::t('hipanel.ipam', 'Parent'),
+                'value' => function (Prefix $model): string {
+                    if ($model->parent === null) {
+                        return '';
+                    }
+
+                    return Html::a(Html::encode($model->parent->ip), ['@prefix/view', 'id' => $model->parent->id]);
+                },
+            ],
             'family' => [
                 'class' => FamilyColumn::class,
             ],
