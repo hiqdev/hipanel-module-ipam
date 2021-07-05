@@ -43,7 +43,10 @@ class AggregateController extends CrudController
                 'class' => ViewAction::class,
                 'data' => static function ($action) {
                     $childDataProvider = new ActiveDataProvider([
-                        'query' => Prefix::find()->andWhere(['ip_cnts_eql' => $action->getCollection()->first->ip, 'limit' => 'ALL'])->noParent(),
+                        'query' => Prefix::find()
+                            ->andWhere(['ip_cnts_eql' => $action->getCollection()->first->ip, 'limit' => 'ALL'])
+                            ->includeSuggestions()
+                            ->noParent(),
                     ]);
 
                     return ['childPrefixesDataProvider' => $childDataProvider];
