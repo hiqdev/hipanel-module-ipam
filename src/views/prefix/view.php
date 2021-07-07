@@ -67,7 +67,10 @@ $this->params['breadcrumbs'][] = $this->title;
                        data-toggle="tab"><?= Yii::t('hipanel.ipam', 'Parent Prefixes') ?></a>
                 </li>
                 <li>
-                    <a href="<?= Url::to(['@address/index', (new AddressSearch)->formName() => ['ip_cnts' => $model->ip]]) ?>">
+                    <a href="<?= Url::to(['@address/index', (new AddressSearch)->formName() => [
+                        'ip_cnts' => $model->ip,
+                        'with_suggestions' => $model->getIPBlock()->getVersion() === \PhpIP\IPv4::IP_VERSION && $model->getIPBlock()->getPrefixLength() > 24
+                    ]]) ?>">
                         <?= Yii::t('hipanel.ipam', 'IP Addresses {count}', [
                             'count' => Html::tag('span', $model->ip_count, ['class' => 'label bg-red']),
                         ]) ?>
@@ -113,7 +116,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]) ?>
                 </div>
                 <div class="tab-pane" id="parent_prefixes">
-                    <?= TreeGrid::widget([
+                    <?= PrefixGridView::widget([
+                        'boxed' => false,
                         'dataProvider' => $parentPrefixesDataProvider,
                         'columns' => ['ip', 'vrf', 'role', 'utilization', 'site', 'text_note'],
                     ]) ?>

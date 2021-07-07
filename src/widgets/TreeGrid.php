@@ -46,7 +46,7 @@ class TreeGrid extends Widget
             'dataProvider' => $this->dataProvider,
             'layout' => '{items}{pager}',
             'filterModel' => new PrefixSearch(),
-            'rowOptions' => static function (Prefix $prefix, $key): array {
+            'rowOptions' => function (Prefix $prefix, $key): array {
                 $class = '';
                 if ($prefix->isSuggested()) {
                     $class = 'success';
@@ -59,7 +59,7 @@ class TreeGrid extends Widget
                         'key' => $prefix->id,
                         'tt-id' => $prefix->id,
                         'tt-parent-id' => $prefix->parent_id ?? 0,
-                        'tt-branch' => $prefix->child_count == 0 ? 'false' : 'true',
+                        'tt-branch' => $prefix->child_count === 0 ? 'false' : 'true',
                         'is-suggested' => $prefix->isSuggested() ? 1 : 0,
                     ],
                     'class' => $class,

@@ -11,19 +11,24 @@ class PrefixSort
 {
     public static function byKinship(array &$models): void
     {
-        $result = [];
-        function kinship(array $models, ?int $id, array &$result)
-        {
-            foreach ($models as $model) {
-                if ($model->parent_id === $id) {
-                    $result[] = $model;
-                    kinship($models, $model->id, $result);
-                }
-            }
-        }
+        usort($models, static function ($a, $b): int {
+            /**
+             * @var IPBlockTrait $a
+             * @var IPBlockTrait $b
+             */
+            $aBlock = $a->getIPBlock();
+            $bBlock = $b->getIPBlock();
 
-        kinship($models, null, $result);
-        $models = empty($result) ? $models : $result;
+            if ($aBlock->contains($bBlock)) {
+                return -1;
+            }
+
+            if ($aBlock->isIn($bBlock)) {
+                return 1;
+            }
+
+            return 0;
+        });
     }
 
     /**

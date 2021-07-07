@@ -83,6 +83,7 @@ class PrefixController extends CrudController
                             ->limit(-1)->all();
 
                         PrefixSort::byKinship($parents);
+                        $parents = array_reverse($parents);
                     }
 
                     $parentDataProvider = new ArrayDataProvider([
