@@ -59,7 +59,7 @@ class TreeGrid extends Widget
                         'key' => $prefix->id,
                         'tt-id' => $prefix->id,
                         'tt-parent-id' => $prefix->parent_id ?? 0,
-                        'tt-branch' => $prefix->child_count === 0 ? 'false' : 'true',
+                        'tt-branch' => empty($prefix->child_count) ? 'false' : 'true',
                         'is-suggested' => $prefix->isSuggested() ? 1 : 0,
                     ],
                     'class' => $class,

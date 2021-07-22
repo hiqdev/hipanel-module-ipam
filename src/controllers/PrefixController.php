@@ -12,9 +12,11 @@ use hipanel\actions\ViewAction;
 use hipanel\base\CrudController;
 use hipanel\filters\EasyAccessControl;
 use hipanel\modules\ipam\actions\TreeGridRowsAction;
+use hipanel\modules\ipam\grid\PrefixRepresentations;
 use hipanel\modules\ipam\helpers\PrefixSort;
 use hipanel\modules\ipam\models\Prefix;
 use hipanel\modules\ipam\models\query\PrefixQuery;
+use hiqdev\higrid\representations\RepresentationCollection;
 use yii\base\Event;
 use yii\data\ArrayDataProvider;
 use yii\helpers\ArrayHelper;
@@ -22,6 +24,14 @@ use Yii;
 
 class PrefixController extends CrudController
 {
+    private RepresentationCollection $representations;
+
+    public function init()
+    {
+        parent::init();
+        $this->representations = new PrefixRepresentations();
+    }
+
     public function behaviors(): array
     {
         return ArrayHelper::merge(parent::behaviors(), [
@@ -39,6 +49,8 @@ class PrefixController extends CrudController
 
     public function actions()
     {
+        $treeGridColumns = $this->representations->getByName('tree-grid-columns')->getColumns();
+
         return array_merge(parent::actions(), [
             'index' => [
                 'class' => IndexAction::class,
@@ -56,7 +68,7 @@ class PrefixController extends CrudController
                 'on beforePerform' => function (Event $event) {
                     $event->sender->getDataProvider()->query->withParent();
                 },
-                'data' => static function ($action): array {
+                'data' => static function ($action) use ($treeGridColumns): array {
                     /** @var Prefix $model */
                     $model = $action->getCollection()->first;
                     $query = Prefix::find()
@@ -94,6 +106,7 @@ class PrefixController extends CrudController
                     return [
                         'childPrefixesDataProvider' => $childDataProvider,
                         'parentPrefixesDataProvider' => $parentDataProvider,
+                        'treeGridColumns' => $treeGridColumns,
                     ];
                 },
             ],
@@ -134,7 +147,7 @@ class PrefixController extends CrudController
             ],
             'get-tree-grid-rows' => [
                 'class' => TreeGridRowsAction::class,
-                'columns' => ['ip', 'state', 'vrf', 'role', 'utilization', 'site', 'text_note', 'checkbox'],
+                'columns' => $treeGridColumns,
             ],
         ]);
     }

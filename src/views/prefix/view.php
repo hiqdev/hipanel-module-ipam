@@ -7,6 +7,7 @@ use hipanel\modules\ipam\models\AddressSearch;
 use hipanel\modules\ipam\models\Prefix;
 use hipanel\modules\ipam\widgets\TreeGrid;
 use hipanel\widgets\MainDetails;
+use PhpIP\IPv4;
 use yii\data\ActiveDataProvider;
 use yii\helpers\Html;
 use yii\web\View;
@@ -16,6 +17,7 @@ use yii\web\View;
  * @var Prefix $model
  * @var ActiveDataProvider[] $parentPrefixesDataProvider
  * @var ActiveDataProvider[] $childPrefixesDataProvider
+ * @var array $treeGridColumns
  */
 
 $this->title = Html::encode($model->ip);
@@ -69,7 +71,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <li>
                     <a href="<?= Url::to(['@address/index', (new AddressSearch)->formName() => [
                         'ip_cnts' => $model->ip,
-                        'with_suggestions' => $model->getIPBlock()->getVersion() === \PhpIP\IPv4::IP_VERSION && $model->getIPBlock()->getPrefixLength() > 24
+                        'with_suggestions' => $model->getIPBlock()->getVersion() === IPv4::IP_VERSION && $model->getIPBlock()->getPrefixLength() > 24
                     ]]) ?>">
                         <?= Yii::t('hipanel.ipam', 'IP Addresses {count}', [
                             'count' => Html::tag('span', $model->ip_count, ['class' => 'label bg-red']),
@@ -112,7 +114,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'dataProvider' => $childPrefixesDataProvider,
                         'showAll' => false,
                         'includeSuggestions' => true,
-                        'columns' => ['ip', 'vrf', 'role', 'utilization', 'site', 'text_note', 'checkbox'],
+                        'columns' => $treeGridColumns
                     ]) ?>
                 </div>
                 <div class="tab-pane" id="parent_prefixes">
