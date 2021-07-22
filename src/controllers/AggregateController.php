@@ -11,13 +11,23 @@ use hipanel\actions\ViewAction;
 use hipanel\base\CrudController;
 use hipanel\filters\EasyAccessControl;
 use hipanel\modules\ipam\actions\TreeGridRowsAction;
+use hipanel\modules\ipam\grid\AggregateRepresentations;
 use hipanel\modules\ipam\models\Prefix;
 use hiqdev\hiart\ActiveDataProvider;
+use hiqdev\higrid\representations\RepresentationCollection;
 use yii\helpers\ArrayHelper;
 use Yii;
 
 class AggregateController extends CrudController
 {
+    private RepresentationCollection $representations;
+
+    public function init()
+    {
+        parent::init();
+        $this->representations = new AggregateRepresentations();
+    }
+
     public function behaviors(): array
     {
         return ArrayHelper::merge(parent::behaviors(), [
@@ -35,13 +45,15 @@ class AggregateController extends CrudController
 
     public function actions()
     {
+        $treeGridColumns = $this->representations->getByName('tree-grid-columns')->getColumns();
+
         return array_merge(parent::actions(), [
             'index' => [
                 'class' => IndexAction::class,
             ],
             'view' => [
                 'class' => ViewAction::class,
-                'data' => static function ($action) {
+                'data' => static function ($action) use ($treeGridColumns): array {
                     $childDataProvider = new ActiveDataProvider([
                         'query' => Prefix::find()
                             ->andWhere(['ip_cnts_eql' => $action->getCollection()->first->ip, 'limit' => 'ALL'])
@@ -49,7 +61,7 @@ class AggregateController extends CrudController
                             ->noParent(),
                     ]);
 
-                    return ['childPrefixesDataProvider' => $childDataProvider];
+                    return ['childPrefixesDataProvider' => $childDataProvider, 'treeGridColumns' => $treeGridColumns];
                 },
             ],
             'create' => [
@@ -76,7 +88,7 @@ class AggregateController extends CrudController
             ],
             'get-tree-grid-rows' => [
                 'class' => TreeGridRowsAction::class,
-                'columns' => ['ip', 'state', 'vrf', 'utilization', 'role', 'text_note'],
+                'columns' => $treeGridColumns,
             ],
         ]);
     }

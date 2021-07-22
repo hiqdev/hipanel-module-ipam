@@ -24,6 +24,9 @@ class PrefixRepresentations extends RepresentationCollection
                     'note',
                 ],
             ],
+            'tree-grid-columns' => [
+                'columns' => ['ip', 'vrf', 'role', 'utilization', 'site', 'text_note', 'checkbox'],
+            ]
         ]);
     }
 }

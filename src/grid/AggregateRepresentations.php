@@ -21,6 +21,9 @@ class AggregateRepresentations extends RepresentationCollection
                     'note',
                 ],
             ],
+            'tree-grid-columns' => [
+                'columns' => ['ip', 'type', 'vrf', 'utilization', 'role', 'text_note'],
+            ]
         ]);
     }
 }

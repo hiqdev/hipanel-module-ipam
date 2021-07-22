@@ -14,6 +14,7 @@ use yii\web\View;
  * @var View $this
  * @var Aggregate $model
  * @var ActiveDataProvider[] $childPrefixesDataProvider
+ * @var array $treeGridColumns
  */
 
 $this->title = Html::encode($model->ip);
@@ -59,7 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= TreeGrid::widget([
                     'dataProvider' => $childPrefixesDataProvider,
                     'showAll' => false,
-                    'columns' => ['ip', 'type', 'vrf', 'utilization', 'role', 'text_note'],
+                    'columns' => $treeGridColumns,
                 ]) ?>
             <?php $page->endBulkForm() ?>
         <?php $page->endContent() ?>
