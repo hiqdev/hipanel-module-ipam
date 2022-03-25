@@ -54,19 +54,19 @@ class PrefixGridView extends BoxedGridView
                 'class' => RefColumn::class,
                 'i18nDictionary' => 'hipanel.ipam',
                 'gtype' => 'type,ip_vrf',
-                'value' => fn($model) => $model->vrf ?? $this->parent->vrf,
+                'value' => fn($model) => $model->vrf ?? $this->parent->vrf ?? '',
             ],
             'role' => [
                 'class' => RefColumn::class,
                 'i18nDictionary' => 'hipanel.ipam',
                 'gtype' => 'type,ip_prefix_role',
-                'value' => fn($model) => $model->role ?? $this->parent->role,
+                'value' => fn($model) => $model->role ?? $this->parent->role ?? '',
             ],
             'site' => [
                 'class' => RefColumn::class,
                 'i18nDictionary' => 'hipanel.ipam',
                 'gtype' => 'type,location',
-                'value' => fn($model) => $model->site ?? $this->parent->site,
+                'value' => fn($model) => $model->site ?? $this->parent->site ?? '',
             ],
             'parent' => [
                 'format' => 'raw',

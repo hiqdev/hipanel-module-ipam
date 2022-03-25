@@ -29,8 +29,6 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= GridLegend::widget(['legendItem' => new PrefixGridLegend($model)]) ?>
         <?php $page->endContent() ?>
 
-        <?php $page->setSearchFormData(compact(['stateData'])) ?>
-
         <?php $page->beginContent('main-actions') ?>
             <?= Html::a(Yii::t('hipanel.ipam', 'Add a new prefix'), 'create', ['class' => 'btn btn-sm btn-success']) ?>
         <?php $page->endContent() ?>
