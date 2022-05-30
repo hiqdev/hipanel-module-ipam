@@ -1,6 +1,6 @@
 <?php
 
-use hipanel\modules\server\widgets\combo\ServerCombo;
+use hipanel\modules\server\widgets\combo\DeviceCombo;
 use hiqdev\combo\StaticCombo;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -57,7 +57,7 @@ $form = ActiveForm::begin([
                     'multiple' => true,
                 ]) ?>
                 <?php if (Yii::getAlias('@server', false)) : ?>
-                    <?= $form->field($model, 'device')->widget(ServerCombo::class, ['pluginOptions' => []]) ?>
+                    <?= $form->field($model, 'device')->widget(DeviceCombo::class, ['pluginOptions' => []]) ?>
                 <?php endif ?>
                 <?= $form->field($model, 'note')->textarea(['rows' => 2]) ?>
             </div>
