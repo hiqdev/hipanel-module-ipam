@@ -6,6 +6,7 @@ use hipanel\modules\ipam\models\Address;
 use hipanel\widgets\IndexPage;
 use hiqdev\higrid\representations\RepresentationCollection;
 use hiqdev\hiart\ActiveDataProvider;
+use yii\data\ArrayDataProvider;
 use yii\helpers\Html;
 
 /**
