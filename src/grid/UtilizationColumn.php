@@ -21,6 +21,7 @@ class UtilizationColumn extends DataColumn
 
     public function getDataCellValue($model, $key, $index)
     {
+        $level = '';
         $prc = (int)$model->utilization ?? 0;
         switch ($prc) {
             case $prc >= 0 && $prc <= 40:
