@@ -12,11 +12,13 @@ use yii\db\Query;
 use yii\db\QueryInterface;
 
 /**
- * @property string ip
- * @property string vrf
- * @property Prefix|null parent
- * @property string type
- * @property int id
+ * @property string $ip
+ * @property string $vrf
+ * @property Prefix|null $parent
+ * @property string $type
+ * @property int $id
+ * @property string $role
+ * @property string $site
  */
 class Prefix extends Model
 {
