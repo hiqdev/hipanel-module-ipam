@@ -19,6 +19,8 @@ use yii\db\QueryInterface;
  * @property int $id
  * @property string $role
  * @property string $site
+ * @property string $state
+ * @property string $client
  */
 class Prefix extends Model
 {
