@@ -34,9 +34,9 @@ class PrefixGridView extends BoxedGridView
                         return Html::a($ip, [
                             '@prefix/create',
                             'ip' => $ip,
-                            'vrf' => Html::encode($this->parent->vrf),
-                            'role' => Html::encode($this->parent->role),
-                            'site' => Html::encode($this->parent->site),
+                            'vrf' => $this->parent ? Html::encode($this->parent->vrf) : '',
+                            'role' => $this->parent ? Html::encode($this->parent->role) : '',
+                            'site' => $this->parent ? Html::encode($this->parent->site) : '',
                         ], ['class' => 'text-bold']);
                     }
                     $ip = Html::a($ip, ['@prefix/view', 'id' => $prefix->id], ['class' => 'text-bold']);
