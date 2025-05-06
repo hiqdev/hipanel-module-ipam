@@ -8,10 +8,13 @@ use hipanel\modules\ipam\models\query\AddressQuery;
 use hipanel\modules\ipam\models\traits\IPBlockTrait;
 use hiqdev\hiart\ActiveQuery;
 use Yii;
-use yii\db\QueryInterface;
-use yii\helpers\ArrayHelper;
 use yii\web\JsExpression;
 
+/**
+ * @property Link[] $links
+ * @property string $device
+ * @property int $device_id
+ */
 class Address extends Prefix
 {
     use IPBlockTrait, ModelTrait;
@@ -61,12 +64,27 @@ class Address extends Prefix
     public function afterFind()
     {
         parent::afterFind();
-        if ($this->isRelationPopulated('links')) {
-            $link = reset($this->links);
-            if ($link instanceof Link) {
+
+        if ($this->hasAnyLinks()) {
+            $link = $this->getFirstLink();
+
+            if ($link) {
                 $this->device = $link->device;
                 $this->device_id = $link->device_id;
             }
         }
+    }
+
+    private function hasAnyLinks(): bool
+    {
+        return $this->isRelationPopulated('links') && !empty($this->links);
+    }
+
+    private function getFirstLink(): ?Link
+    {
+        $links = $this->links;
+        $link = reset($links);
+
+        return $link instanceof Link ? $link : null;
     }
 }
