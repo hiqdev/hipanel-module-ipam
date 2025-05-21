@@ -38,8 +38,7 @@ return [
                             'class' => \hipanel\modules\ipam\menus\SidebarMenu::class,
                         ],
                         'where' => [
-                            'after' => ['servers', 'domains', 'tickets', 'finance', 'clients', 'dashboard', 'hosting'],
-                            'before' => ['stock'],
+                            'after' => ['hosting'],
                         ],
                     ],
                 ],

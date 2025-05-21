@@ -30,7 +30,7 @@ class SidebarMenu extends Menu
                         'url' => ['/ipam/aggregate/index'],
                     ],
                 ],
-                'visible' => $user->can('ip.read'),
+                'visible' => $user->can('owner-staff') && $user->can('ip.read'),
             ],
         ];
     }
