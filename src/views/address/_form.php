@@ -36,8 +36,8 @@ $form = ActiveForm::begin([
                         <?= Yii::t('hipanel.ipam', '{v4}, {v6}, {r4}, {r6}', [
                             'v4' => Html::tag('code', '192.0.2.1'),
                             'v6' => Html::tag('code', '2001:db8::'),
-                            'r4' => Html::tag('code', '192.0.2.[1,5,100-254]/24'),
-                            'r6' => Html::tag('code', '2001:db8:0:[0,fd-ff]::/64'),
+                            'r4' => Html::tag('code', '192.0.2.[1,5,100-254]'),
+                            'r6' => Html::tag('code', '2001:db8:0:[0,fd-ff]::'),
                         ]) ?>
                     </div>
                 </div>
